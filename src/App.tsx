@@ -20,6 +20,7 @@ function App() {
   const [showFeedback, setShowFeedback] = useState(false);
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
+  const isFirstQuestion = currentQuestionIndex === 0;
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
 
   const handleStartGame = () => {
@@ -39,17 +40,27 @@ function App() {
       setGameState("results");
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer(null);
-      setShowFeedback(false);
+      resetQuestionState();
     }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (!isFirstQuestion) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      resetQuestionState();
+    }
+  };
+
+  const resetQuestionState = () => {
+    setSelectedAnswer(null);
+    setShowFeedback(false);
   };
 
   const handleRestartGame = () => {
     setGameState("start");
     setCurrentQuestionIndex(0);
     setScore(0);
-    setSelectedAnswer(null);
-    setShowFeedback(false);
+    resetQuestionState();
   };
 
   const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
@@ -126,11 +137,7 @@ function App() {
                         <p>
                           {selectedAnswer === currentQuestion.correctAnswer
                             ? "Great job! You got the right answer."
-                            : `Sorry, that's not correct. The right answer was: ${
-                                currentQuestion.options[
-                                  currentQuestion.correctAnswer
-                                ]
-                              }`}
+                            : "Sorry, that's not correct. Try again!"}
                         </p>
                       </Alert>
                     )}
@@ -148,7 +155,14 @@ function App() {
                       />
                     </div>
 
-                    <div className="text-center">
+                    <div className="d-flex justify-content-between">
+                      <Button
+                        variant="secondary"
+                        onClick={handlePreviousQuestion}
+                        disabled={isFirstQuestion}
+                      >
+                        Previous
+                      </Button>
                       <Button
                         variant="primary"
                         onClick={handleNextQuestion}
