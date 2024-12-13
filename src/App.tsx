@@ -64,6 +64,7 @@ function App() {
     setGameState("start");
     setCurrentQuestionIndex(0);
     setScore(0);
+    setProgress(0); // Updated to reset progress
     resetQuestionState();
   };
 
@@ -168,12 +169,15 @@ function App() {
                       >
                         Previous
                       </Button>
+                      <Button variant="warning" onClick={handleRestartGame}>
+                        Home/Reset
+                      </Button>
                       <Button
                         variant="primary"
                         onClick={handleNextQuestion}
                         disabled={!showFeedback}
                       >
-                        {isLastQuestion ? "Finish Quiz" : "Next Question"}
+                        {isLastQuestion ? "Finish" : "Next"}
                       </Button>
                     </div>
                   </>
