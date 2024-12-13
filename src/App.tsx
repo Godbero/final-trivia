@@ -41,23 +41,23 @@ function App() {
       setGameState("results");
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setProgress(((currentQuestionIndex + 2) / quizQuestions.length) * 100);
       resetQuestionState();
-      setProgress(((currentQuestionIndex + 2) / quizQuestions.length) * 100); // Updated to increment progress
     }
   };
 
   const handlePreviousQuestion = () => {
     if (!isFirstQuestion) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setScore((prevScore) => Math.max(0, prevScore - 1)); // Decrease score by 1, but not below 0
+      setProgress((currentQuestionIndex / quizQuestions.length) * 100); // Update progress
       resetQuestionState();
-      setScore(0); // Reset the score when going back
     }
   };
 
   const resetQuestionState = () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
-    setProgress(0); // Reset the progress
   };
 
   const handleRestartGame = () => {
