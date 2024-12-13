@@ -18,6 +18,7 @@ function App() {
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [progress, setProgress] = useState(0); // Added progress state
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const isFirstQuestion = currentQuestionIndex === 0;
@@ -41,6 +42,7 @@ function App() {
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       resetQuestionState();
+      setProgress(((currentQuestionIndex + 2) / quizQuestions.length) * 100); // Updated to increment progress
     }
   };
 
@@ -48,12 +50,14 @@ function App() {
     if (!isFirstQuestion) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
       resetQuestionState();
+      setScore(0); // Reset the score when going back
     }
   };
 
   const resetQuestionState = () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
+    setProgress(0); // Reset the progress
   };
 
   const handleRestartGame = () => {
@@ -63,7 +67,7 @@ function App() {
     resetQuestionState();
   };
 
-  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+  // Progress is now managed by state
 
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center bg-primary">
@@ -152,7 +156,8 @@ function App() {
                       <ProgressBar
                         now={progress}
                         label={`${Math.round(progress)}%`}
-                      />
+                      />{" "}
+                      {/* Updated to use state variable */}
                     </div>
 
                     <div className="d-flex justify-content-between">
