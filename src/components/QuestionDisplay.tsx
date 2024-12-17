@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { QuizQuestion } from '../quizData';
+import AnswerButton from './AnswerButton';
 
 interface QuestionDisplayProps {
   question: QuizQuestion;
@@ -20,16 +21,15 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
       <h2 className="h4 text-center mb-4">{question.question}</h2>
       <div className="d-grid gap-2 mb-4">
         {question.options.map((option, index) => (
-          <Button
+          <AnswerButton
             key={index}
-            variant={selectedAnswer === index 
-              ? (index === question.correctAnswer ? "success" : "danger") 
-              : "outline-primary"}
-            onClick={() => onAnswerSelected(index)}
-            disabled={showFeedback}
-          >
-            {String.fromCharCode(65 + index)}. {option}
-          </Button>
+            option={option}
+            index={index}
+            isSelected={selectedAnswer === index}
+            isCorrect={index === question.correctAnswer}
+            showFeedback={showFeedback}
+            onSelect={onAnswerSelected}
+          />
         ))}
       </div>
       {showFeedback && (
