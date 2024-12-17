@@ -1,31 +1,25 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  ProgressBar,
-  Alert,
-} from "react-bootstrap";
-import { quizQuestions, QuizQuestion } from "./quizData";
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, ProgressBar } from 'react-bootstrap';
+import { quizQuestions } from './quizData';
+import QuestionDisplay from './components/QuestionDisplay';
+import ResultsDisplay from './components/ResultsDisplay';
 
-type GameState = "start" | "playing" | "results";
+type GameState = 'start' | 'playing' | 'results';
 
 function App() {
-  const [gameState, setGameState] = useState<GameState>("start");
+  const [gameState, setGameState] = useState<GameState>('start');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [progress, setProgress] = useState(0); // Added progress state
+  const [progress, setProgress] = useState(0);
 
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const isFirstQuestion = currentQuestionIndex === 0;
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
 
   const handleStartGame = () => {
-    setGameState("playing");
+    setGameState('playing');
   };
 
   const handleAnswer = (index: number) => {
@@ -38,7 +32,7 @@ function App() {
 
   const handleNextQuestion = () => {
     if (isLastQuestion) {
-      setGameState("results");
+      setGameState('results');
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setProgress(((currentQuestionIndex + 2) / quizQuestions.length) * 100);
@@ -49,8 +43,8 @@ function App() {
   const handlePreviousQuestion = () => {
     if (!isFirstQuestion) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setScore((prevScore) => Math.max(0, prevScore - 1)); // Decrease score by 1, but not below 0
-      setProgress((currentQuestionIndex / quizQuestions.length) * 100); // Update progress
+      setScore(prevScore => Math.max(0, prevScore - 1));
+      setProgress(((currentQuestionIndex) / quizQuestions.length) * 100);
       resetQuestionState();
     }
   };
@@ -61,14 +55,12 @@ function App() {
   };
 
   const handleRestartGame = () => {
-    setGameState("start");
+    setGameState('start');
     setCurrentQuestionIndex(0);
     setScore(0);
-    setProgress(0); // Updated to reset progress
+    setProgress(0);
     resetQuestionState();
   };
-
-  // Progress is now managed by state
 
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center bg-primary">
@@ -77,104 +69,51 @@ function App() {
           <Col xs={12} md={8} lg={6}>
             <Card>
               <Card.Header className="text-center">
-                <h1 className="h3 mb-0">
-                  {"You Don't Know Jack Schitt's Creek"}
-                </h1>
+                <h1 className="h3 mb-0">{"You Don't Know Jack Schitt's Creek"}</h1>
               </Card.Header>
               <Card.Body>
-                {gameState === "start" && (
+                {gameState === 'start' && (
                   <div className="text-center">
-                    <p className="lead">
-                      Welcome to the ultimate Schitt's Creek quiz!
-                    </p>
-                    <p>
-                      Test your knowledge with {quizQuestions.length}{" "}
-                      challenging questions.
-                    </p>
-                    <Button onClick={handleStartGame} size="lg">
-                      Start Quiz
-                    </Button>
+                    <p className="lead">Welcome to the ultimate Schitt's Creek quiz!</p>
+                    <p>Test your knowledge with {quizQuestions.length} challenging questions.</p>
+                    <Button onClick={handleStartGame} size="lg">Start Quiz</Button>
                   </div>
                 )}
 
-                {gameState === "playing" && (
+                {gameState === 'playing' && (
                   <>
-                    <h2 className="h4 text-center mb-4">
-                      Question {currentQuestionIndex + 1} of{" "}
-                      {quizQuestions.length}
-                    </h2>
-                    <p className="lead text-center mb-4">
-                      {currentQuestion.question}
-                    </p>
-
-                    <div className="d-grid gap-2 mb-4">
-                      {currentQuestion.options.map((option, index) => (
-                        <Button
-                          key={index}
-                          variant={
-                            selectedAnswer === index
-                              ? index === currentQuestion.correctAnswer
-                                ? "success"
-                                : "danger"
-                              : "outline-primary"
-                          }
-                          onClick={() => handleAnswer(index)}
-                          disabled={showFeedback}
-                        >
-                          {String.fromCharCode(65 + index)}. {option}
-                        </Button>
-                      ))}
-                    </div>
-
-                    {showFeedback && (
-                      <Alert
-                        variant={
-                          selectedAnswer === currentQuestion.correctAnswer
-                            ? "success"
-                            : "danger"
-                        }
-                      >
-                        <Alert.Heading>
-                          {selectedAnswer === currentQuestion.correctAnswer
-                            ? "Correct!"
-                            : "Incorrect!"}
-                        </Alert.Heading>
-                        <p>
-                          {selectedAnswer === currentQuestion.correctAnswer
-                            ? "Great job! You got the right answer."
-                            : "Sorry, that's not correct. Try again!"}
-                        </p>
-                      </Alert>
-                    )}
+                    <QuestionDisplay
+                      question={currentQuestion}
+                      selectedAnswer={selectedAnswer}
+                      showFeedback={showFeedback}
+                      onAnswerSelected={handleAnswer}
+                    />
 
                     <div className="mb-3">
                       <div className="d-flex justify-content-between mb-2">
                         <span>Game Progress:</span>
-                        <span>
-                          Score: {score}/{quizQuestions.length}
-                        </span>
+                        <span>Score: {score}/{quizQuestions.length}</span>
                       </div>
-                      <ProgressBar
-                        now={progress}
-                        label={`${Math.round(progress)}%`}
-                      />{" "}
-                      {/* Updated to use state variable */}
+                      <ProgressBar now={progress} label={`${Math.round(progress)}%`} />
                     </div>
 
                     <div className="d-flex justify-content-between">
-                      <Button
-                        variant="secondary"
-                        onClick={handlePreviousQuestion}
+                      <Button 
+                        variant="secondary" 
+                        onClick={handlePreviousQuestion} 
                         disabled={isFirstQuestion}
                       >
                         Previous
                       </Button>
-                      <Button variant="warning" onClick={handleRestartGame}>
+                      <Button 
+                        variant="warning" 
+                        onClick={handleRestartGame}
+                      >
                         Home/Reset
                       </Button>
-                      <Button
-                        variant="primary"
-                        onClick={handleNextQuestion}
+                      <Button 
+                        variant="primary" 
+                        onClick={handleNextQuestion} 
                         disabled={!showFeedback}
                       >
                         {isLastQuestion ? "Finish" : "Next"}
@@ -183,25 +122,12 @@ function App() {
                   </>
                 )}
 
-                {gameState === "results" && (
-                  <div className="text-center">
-                    <h2 className="h3 mb-4">Quiz Completed!</h2>
-                    <p className="lead mb-4">
-                      Your final score: {score}/{quizQuestions.length}
-                    </p>
-                    <p>
-                      {score === quizQuestions.length
-                        ? "Perfect score! You're a true Schitt's Creek expert!"
-                        : score >= quizQuestions.length * 0.8
-                        ? "Great job! You really know your Schitt's Creek!"
-                        : score >= quizQuestions.length * 0.6
-                        ? "Not bad! You've got a good grasp of Schitt's Creek."
-                        : "Looks like you might need to rewatch some episodes!"}
-                    </p>
-                    <Button onClick={handleRestartGame} size="lg">
-                      Play Again
-                    </Button>
-                  </div>
+                {gameState === 'results' && (
+                  <ResultsDisplay
+                    score={score}
+                    totalQuestions={quizQuestions.length}
+                    onRestartGame={handleRestartGame}
+                  />
                 )}
               </Card.Body>
             </Card>
@@ -213,3 +139,4 @@ function App() {
 }
 
 export default App;
+
