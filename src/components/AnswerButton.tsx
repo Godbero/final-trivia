@@ -17,7 +17,7 @@ const AnswerButton = ({
   isCorrect,
   showFeedback,
   onSelect
-}) => {
+}: AnswerButtonProps) => {
   const getVariant = () => {
     if (!showFeedback) return 'outline-primary';
     if (isSelected) return isCorrect ? 'success' : 'danger';

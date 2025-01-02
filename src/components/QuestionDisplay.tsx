@@ -15,7 +15,7 @@ const QuestionDisplay = ({
   selectedAnswer,
   showFeedback,
   onAnswerSelected
-}) => {
+}: QuestionDisplayProps) => {
   return (
     <>
       <h2 className="h4 text-center mb-4">{question.question}</h2>

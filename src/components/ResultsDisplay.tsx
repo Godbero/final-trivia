@@ -11,7 +11,7 @@ const ResultsDisplay = ({
   score,
   totalQuestions,
   onRestartGame
-}) => {
+}: ResultsDisplayProps) => {
   return (
     <div className="text-center">
       <h2 className="h3 mb-4">Quiz Completed!</h2>
