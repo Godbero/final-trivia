@@ -10,7 +10,7 @@ interface QuestionDisplayProps {
   onAnswerSelected: (index: number) => void;
 }
 
-const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
+const QuestionDisplay = ({
   question,
   selectedAnswer,
   showFeedback,

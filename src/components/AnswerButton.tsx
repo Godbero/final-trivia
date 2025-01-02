@@ -10,7 +10,7 @@ interface AnswerButtonProps {
   onSelect: (index: number) => void;
 }
 
-const AnswerButton: React.FC<AnswerButtonProps> = ({
+const AnswerButton = ({
   option,
   index,
   isSelected,

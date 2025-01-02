@@ -7,7 +7,7 @@ interface ResultsDisplayProps {
   onRestartGame: () => void;
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
+const ResultsDisplay = ({
   score,
   totalQuestions,
   onRestartGame
